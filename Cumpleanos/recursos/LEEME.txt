@@ -1,0 +1,8 @@
+Coloca tus archivos con estos nombres exactos:
+
+recursos/fondos/fondo1.jpg ... fondo4.jpg  (paisajes/fotos horizontales, ideal 1920x1080)
+recursos/fotos/foto1.jpg ... foto6.jpg     (ideal 1200 px de lado largo)
+recursos/musica.mp3                        (opcional)
+
+Luego abre index.html con Google Chrome.
+Si falta alguna imagen, la pagina muestra un reemplazo elegante.

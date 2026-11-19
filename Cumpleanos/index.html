@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Para vos</title>
+<style>
+/* ===== Paleta y tipografías ===== */
+:root{
+  --negro:#150c0f; --bordo:#3a0f1c; --vino:#5e1a2e; --rosa:#c99aa3; --blanco:#f6ece6; --oro:#d3b88c;
+  --titulo:'Cormorant Garamond','Playfair Display','Didot','Bodoni MT',Georgia,serif;
+  --mano:'Great Vibes','Snell Roundhand','Segoe Script','Brush Script MT',cursive;
+  --texto:'Inter','Segoe UI',system-ui,-apple-system,Roboto,sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;background:var(--negro)}
+body{font-family:var(--texto);color:var(--blanco);background:var(--negro);overflow-x:hidden;-webkit-font-smoothing:antialiased}
+body:not(.go){overflow:hidden;height:100vh}
+button{font:inherit;color:inherit;cursor:pointer;background:none;border:0}
+:focus-visible{outline:1px solid var(--oro);outline-offset:4px}
+
+/* ===== Fondos con crossfade (fijos, no se reinician) ===== */
+#fondos{position:fixed;inset:0;z-index:0;overflow:hidden;background:var(--negro)}
+.slide{position:absolute;inset:-4%;opacity:0;transition:opacity 2.8s ease-in-out;
+  background-size:cover;background-position:center;
+  animation:kb 26s ease-in-out infinite alternate}
+.slide.on{opacity:1}
+.slide:nth-child(1){background-image:url(recursos/fondos/fondo1.jpg),linear-gradient(135deg,#3a0f1c,#150c0f)}
+.slide:nth-child(2){background-image:url(recursos/fondos/fondo2.jpg),linear-gradient(200deg,#5e1a2e,#1b0d12);animation-delay:-6s}
+.slide:nth-child(3){background-image:url(recursos/fondos/fondo3.jpg),linear-gradient(160deg,#2a1118,#4a1626);animation-delay:-12s}
+.slide:nth-child(4){background-image:url(recursos/fondos/fondo4.jpg),linear-gradient(120deg,#4a2030,#150c0f);animation-delay:-18s}
+@keyframes kb{from{transform:scale(1) translate(0,0)}to{transform:scale(1.1) translate(-1.5%,-1%)}}
+#velo{position:fixed;inset:0;z-index:1;pointer-events:none;
+  background:linear-gradient(180deg,rgba(21,12,15,.55),rgba(58,15,28,.45) 50%,rgba(21,12,15,.7));
+  backdrop-filter:blur(2.5px);-webkit-backdrop-filter:blur(2.5px)}
+
+/* ===== Pantalla inicial ===== */
+#intro{position:fixed;inset:0;z-index:100;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2.2rem;
+  padding:2rem;text-align:center;background:radial-gradient(ellipse at 50% 40%,#3a0f1c 0%,#150c0f 70%);
+  transition:opacity 1.4s ease,visibility 1.4s}
+#intro.out{opacity:0;visibility:hidden}
+#intro .frase{font-family:var(--mano);font-size:clamp(2rem,6vw,3.4rem);color:var(--rosa);opacity:0;animation:entra 2s .4s ease forwards}
+#intro .linea{width:0;height:1px;background:linear-gradient(90deg,transparent,var(--oro),transparent);
+  animation:linea 2.4s .9s ease forwards,brillo 4s 3.3s ease-in-out infinite}
+#intro .boton{opacity:0;animation:entra 2s 1.6s ease forwards}
+@keyframes entra{from{opacity:0;transform:translateY(10px);filter:blur(4px)}to{opacity:1;transform:none;filter:none}}
+@keyframes linea{to{width:min(260px,60vw)}}
+@keyframes brillo{50%{opacity:.35}}
+.boton{padding:.95rem 1.8rem;border:1px solid rgba(211,184,140,.55);border-radius:999px;letter-spacing:.2em;font-size:.72rem;
+  color:var(--blanco);background:rgba(255,255,255,.03);transition:background .5s,border-color .5s,box-shadow .5s}
+.boton:hover{background:rgba(211,184,140,.12);border-color:var(--oro);box-shadow:0 0 28px rgba(211,184,140,.18)}
+
+/* ===== Estructura general ===== */
+main{position:relative;z-index:2}
+section{min-height:100vh;min-height:100svh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:6rem 1.2rem}
+h2{font-family:var(--titulo);font-weight:500;font-size:clamp(2rem,5vw,3.2rem);text-align:center;line-height:1.15;letter-spacing:.01em}
+.sub{font-family:var(--mano);color:var(--rosa);font-size:clamp(1.3rem,3.4vw,1.8rem);text-align:center;margin-top:.8rem}
+
+/* Aparición al desplazarse */
+.rv{opacity:0;transform:translateY(18px);filter:blur(5px);transition:opacity 1.6s ease,transform 1.6s ease,filter 1.6s ease}
+.rv.in{opacity:1;transform:none;filter:none}
+
+/* ===== Carta ===== */
+.carta{width:min(720px,100%);padding:clamp(1.8rem,5vw,3.4rem);border-radius:22px;
+  background:rgba(30,12,18,.42);border:1px solid rgba(211,184,140,.28);
+  backdrop-filter:blur(18px) saturate(1.1);-webkit-backdrop-filter:blur(18px) saturate(1.1);
+  box-shadow:0 30px 80px rgba(0,0,0,.45),inset 0 0 0 1px rgba(255,255,255,.04)}
+.carta .saludo{font-family:var(--mano);font-size:clamp(2.2rem,6vw,3rem);color:var(--rosa);margin-bottom:1.4rem;line-height:1.1}
+.carta p{font-family:var(--titulo);font-size:clamp(1.15rem,2.6vw,1.35rem);line-height:1.75;margin-bottom:1.2rem;color:#f3e6df}
+.carta .cierre{font-style:italic}
+.firma{font-family:var(--mano);font-size:clamp(1.7rem,4.5vw,2.2rem);color:var(--oro);text-align:right;margin-top:1.6rem}
+
+/* ===== Galería ===== */
+#galeria{justify-content:flex-start;padding-top:7rem}
+.album{width:min(1100px,100%);margin-top:3.2rem;display:grid;gap:clamp(.8rem,2vw,1.6rem);
+  grid-template-columns:repeat(6,1fr);grid-auto-rows:clamp(70px,10vw,115px)}
+.foto{position:relative;padding:8px;border-radius:20px;cursor:zoom-in;--r:0deg;
+  background:linear-gradient(145deg,rgba(246,236,230,.14),rgba(94,26,46,.28));
+  border:1px solid rgba(211,184,140,.38);
+  box-shadow:0 0 34px rgba(201,154,163,.16),0 18px 38px rgba(0,0,0,.4);
+  transform:rotate(var(--r));transition:transform .7s cubic-bezier(.2,.7,.2,1),box-shadow .7s,opacity 1.6s ease,filter 1.6s ease}
+.foto:hover{transform:translateY(-8px) rotate(0deg) scale(1.015);box-shadow:0 0 50px rgba(201,154,163,.32),0 28px 50px rgba(0,0,0,.5)}
+.foto .marco{position:relative;width:100%;height:100%;border-radius:13px;overflow:hidden;
+  background:linear-gradient(160deg,#4a1626,#1b0d12)}
+.foto .marco::after{content:attr(data-n);position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+  font-family:var(--mano);font-size:1.7rem;color:rgba(211,184,140,.55)}
+.foto img{position:relative;z-index:1;width:100%;height:100%;object-fit:cover;display:block;transition:transform 1.2s ease}
+.foto:hover img{transform:scale(1.05)}
+.foto img.falta{display:none}
+.foto:nth-child(1){grid-column:span 3;grid-row:span 4;--r:-.6deg}
+.foto:nth-child(2){grid-column:span 3;grid-row:span 2;--r:.7deg}
+.foto:nth-child(3){grid-column:span 3;grid-row:span 2;--r:-.4deg}
+.foto:nth-child(4){grid-column:span 2;grid-row:span 3;--r:.5deg}
+.foto:nth-child(5){grid-column:span 2;grid-row:span 3;--r:-.7deg}
+.foto:nth-child(6){grid-column:span 2;grid-row:span 3;--r:.4deg}
+@media(max-width:700px){
+  .album{grid-template-columns:repeat(2,1fr);grid-auto-rows:clamp(90px,26vw,130px)}
+  .foto:nth-child(1){grid-column:span 2;grid-row:span 3}
+  .foto:nth-child(2),.foto:nth-child(3){grid-column:span 1;grid-row:span 2}
+  .foto:nth-child(4){grid-column:span 2;grid-row:span 2}
+  .foto:nth-child(5),.foto:nth-child(6){grid-column:span 1;grid-row:span 2}
+}
+
+/* ===== Visor ===== */
+#visor{position:fixed;inset:0;z-index:200;display:flex;align-items:center;justify-content:center;
+  background:rgba(10,5,7,.9);opacity:0;visibility:hidden;transition:opacity .6s,visibility .6s}
+#visor.on{opacity:1;visibility:visible}
+#visor .caja{max-width:92vw;max-height:86vh;padding:8px;border-radius:18px;border:1px solid rgba(211,184,140,.4);
+  background:rgba(246,236,230,.06);box-shadow:0 0 70px rgba(201,154,163,.2);
+  transform:scale(.94);transition:transform .7s cubic-bezier(.2,.7,.2,1)}
+#visor.on .caja{transform:none}
+#visor img{display:block;max-width:calc(92vw - 18px);max-height:calc(86vh - 18px);border-radius:12px;object-fit:contain}
+#visor .vacio{padding:4rem 3rem;font-family:var(--mano);font-size:2rem;color:var(--oro)}
+.ctl{position:absolute;width:48px;height:48px;border-radius:50%;border:1px solid rgba(211,184,140,.4);
+  display:flex;align-items:center;justify-content:center;transition:background .4s;background:rgba(0,0,0,.25)}
+.ctl:hover{background:rgba(211,184,140,.15)}
+.ctl svg{width:20px;height:20px;stroke:var(--blanco);fill:none;stroke-width:1.3}
+#cerrar{top:max(1rem,env(safe-area-inset-top));right:1rem}
+#ant{left:.8rem;top:50%;margin-top:-24px}
+#sig{right:.8rem;top:50%;margin-top:-24px}
+
+/* ===== Recuerdos ===== */
+.cita{font-family:var(--titulo);font-style:italic;font-weight:400;max-width:820px;font-size:clamp(1.7rem,4.6vw,3rem);line-height:1.35;text-align:center}
+.bloques{display:grid;grid-template-columns:repeat(3,1fr);gap:1.2rem;width:min(980px,100%);margin-top:3.4rem}
+.bloque{padding:2rem 1.5rem;border-radius:16px;text-align:center;font-family:var(--titulo);font-size:1.3rem;line-height:1.5;
+  background:rgba(30,12,18,.4);border:1px solid rgba(211,184,140,.25);
+  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);transition:transform .8s,border-color .8s,box-shadow .8s}
+.bloque::before{content:"";display:block;width:34px;height:1px;background:var(--oro);margin:0 auto 1.2rem;opacity:.7;transition:width .8s}
+.bloque:hover{transform:translateY(-5px);border-color:rgba(211,184,140,.55);box-shadow:0 0 36px rgba(201,154,163,.18)}
+.bloque:hover::before{width:64px}
+@media(max-width:760px){.bloques{grid-template-columns:1fr}}
+
+/* ===== Final ===== */
+#final{position:relative;background:linear-gradient(180deg,transparent 0%,rgba(21,12,15,.78) 35%,#150c0f 100%);text-align:center;gap:2rem}
+#final .grande{font-family:var(--titulo);font-weight:400;font-size:clamp(1.6rem,4.2vw,2.7rem);line-height:1.4;max-width:800px}
+#final .deseo{font-family:var(--mano);font-size:clamp(1.8rem,4.8vw,2.8rem);color:var(--rosa)}
+#final .boton{margin-top:1.2rem;font-size:.68rem}
+
+/* ===== Control de música ===== */
+#musica{position:fixed;z-index:150;right:1rem;bottom:max(1rem,env(safe-area-inset-bottom));width:42px;height:42px;border-radius:50%;
+  display:none;align-items:center;justify-content:center;border:1px solid rgba(211,184,140,.4);background:rgba(21,12,15,.5);
+  backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);transition:background .4s}
+#musica.show{display:flex}
+#musica:hover{background:rgba(211,184,140,.15)}
+#musica svg{width:18px;height:18px;stroke:var(--blanco);fill:none;stroke-width:1.4}
+#musica .tacha{display:none}
+#musica.off .tacha{display:block}
+
+/* ===== Movimiento reducido ===== */
+@media(prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  .slide{animation:none;transition-duration:1s}
+  .rv{transform:none;filter:none;transition:opacity .8s}
+  .foto,.bloque,.foto img{transition:none}
+  #intro .frase,#intro .boton{animation-duration:.01s}
+  #intro .linea{animation:none;width:200px}
+}
+</style>
+</head>
+<body>
+
+<!-- Fondos y capa de lectura -->
+<div id="fondos" aria-hidden="true"><div class="slide on"></div><div class="slide"></div><div class="slide"></div><div class="slide"></div></div>
+<div id="velo" aria-hidden="true"></div>
+
+<!-- Pantalla de bienvenida -->
+<div id="intro">
+  <p class="frase">Tengo algo especial preparado para vos</p>
+  <div class="linea"></div>
+  <button class="boton" id="comenzar">PANTALLA COMPLETA PARA COMENZAR</button>
+</div>
+
+<main>
+  <!-- Carta -->
+  <section id="carta">
+    <article class="carta" id="cartaTexto">
+      <p class="saludo rv">Feliz cumpleaños, amorcito de mi vida.</p>
+      <p class="rv">Espero que la hayas pasado súper bien, que hayas disfrutado muchísimo tu día y que siempre encuentres motivos para sonreír. Deseo de corazón que seas muy feliz, que cumplas cada uno de tus sueños y que nunca te falten razones para sentirte querida.</p>
+      <p class="rv">Todavía no puedo creer cómo nos conocimos. Fue algo tan bonito y tan inesperado, jajaja. Si en ese momento me hubieran contado todo lo que íbamos a compartir, probablemente no lo habría imaginado.</p>
+      <p class="rv">Me encanta tenerte en mi vida, compartir momentos con vos, reírnos por cualquier cosa y seguir creando recuerdos juntos. Quizás no siempre encuentre las palabras exactas para expresar lo que siento, pero quiero que sepas lo importante que sos para mí.</p>
+      <p class="rv">Ojalá este nuevo año de tu vida venga lleno de cosas lindas, oportunidades, alegrías y momentos que te hagan feliz. Y ojalá pueda seguir estando a tu lado para compartir muchos de ellos.</p>
+      <p class="rv">Gracias por ser vos, por tu forma de ser y por cada momento que me regalás.</p>
+      <p class="rv">Disfrutá muchísimo tu día, mi amor. Te merecés todo lo bonito que existe.</p>
+      <p class="rv cierre">Te amo muchísimo. Feliz cumpleaños, mi vida.</p>
+      <p class="firma rv">Con todo mi amor, para vos.</p>
+    </article>
+  </section>
+
+  <!-- Galería -->
+  <section id="galeria">
+    <h2 class="rv">Nuestros pequeños grandes recuerdos</h2>
+    <p class="sub rv">Cada fotografía guarda un momento que siempre voy a querer recordar.</p>
+    <div class="album" id="album"></div>
+  </section>
+
+  <!-- Recuerdos -->
+  <section id="recuerdos">
+    <p class="cita rv">De todos los momentos bonitos que tiene la vida, conocerme con vos fue uno de mis favoritos.</p>
+    <div class="bloques">
+      <div class="bloque rv">Un encuentro que no esperaba.</div>
+      <div class="bloque rv">Una historia que quiero seguir construyendo.</div>
+      <div class="bloque rv">Muchos recuerdos que todavía nos quedan por crear.</div>
+    </div>
+  </section>
+
+  <!-- Mensaje final -->
+  <section id="final">
+    <p class="grande rv">Y si pudiera volver al día en que nos conocimos, volvería a elegir ese mismo momento, porque fue el comienzo de algo muy bonito.</p>
+    <p class="deseo rv">Feliz cumpleaños, mi amor. Que la vida siempre te encuentre sonriendo.</p>
+    <button class="boton rv" id="volver">Volver a ver nuestros recuerdos</button>
+  </section>
+</main>
+
+<!-- Visor de fotos -->
+<div id="visor" role="dialog" aria-modal="true" aria-label="Fotografía ampliada">
+  <button class="ctl" id="cerrar" aria-label="Cerrar"><svg viewBox="0 0 24 24"><path d="M5 5l14 14M19 5L5 19"/></svg></button>
+  <button class="ctl" id="ant" aria-label="Anterior"><svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg></button>
+  <button class="ctl" id="sig" aria-label="Siguiente"><svg viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg></button>
+  <div class="caja" id="caja"></div>
+</div>
+
+<!-- Música -->
+<button id="musica" aria-label="Activar o silenciar la música">
+  <svg viewBox="0 0 24 24"><path d="M4 9h4l5-4v14l-5-4H4z"/><path d="M16.5 9a4 4 0 010 6"/><path class="tacha" d="M3 3l18 18"/></svg>
+</button>
+
+<script>
+(function(){
+  'use strict';
+  var $ = function(s){return document.querySelector(s)};
+
+  /* ---------- Galería: se construye desde recursos/fotos ---------- */
+  var TOTAL_FOTOS = 6, album = $('#album'), fotos = [];
+  for (var i = 1; i <= TOTAL_FOTOS; i++){
+    var fig = document.createElement('figure');
+    fig.className = 'foto rv';
+    fig.tabIndex = 0;
+    fig.setAttribute('role','button');
+    fig.setAttribute('aria-label','Ampliar fotografía ' + i);
+    var marco = document.createElement('div');
+    marco.className = 'marco';
+    marco.setAttribute('data-n', 'Foto ' + i);
+    var img = document.createElement('img');
+    img.loading = 'lazy'; img.decoding = 'async'; img.alt = 'Nuestra fotografía ' + i;
+    img.onerror = function(){ this.classList.add('falta'); };
+    img.src = 'recursos/fotos/foto' + i + '.jpg';
+    marco.appendChild(img); fig.appendChild(marco); album.appendChild(fig);
+    fotos.push({src: img.src, el: img, fig: fig});
+    (function(n){
+      fig.addEventListener('click', function(){ abrir(n); });
+      fig.addEventListener('keydown', function(e){ if(e.key==='Enter'||e.key===' '){e.preventDefault();abrir(n);} });
+    })(i-1);
+  }
+
+  /* ---------- Visor ---------- */
+  var visor = $('#visor'), caja = $('#caja'), actual = 0;
+  function mostrar(n){
+    actual = (n + fotos.length) % fotos.length;
+    caja.innerHTML = '';
+    var f = fotos[actual];
+    if (f.el.classList.contains('falta')){
+      var v = document.createElement('div'); v.className = 'vacio'; v.textContent = 'Foto ' + (actual+1);
+      caja.appendChild(v);
+    } else {
+      var im = document.createElement('img'); im.src = f.src; im.alt = f.el.alt; caja.appendChild(im);
+    }
+  }
+  function abrir(n){ mostrar(n); visor.classList.add('on'); }
+  function cerrar(){ visor.classList.remove('on'); }
+  $('#cerrar').onclick = cerrar;
+  $('#ant').onclick = function(e){ e.stopPropagation(); mostrar(actual-1); };
+  $('#sig').onclick = function(e){ e.stopPropagation(); mostrar(actual+1); };
+  visor.addEventListener('click', function(e){ if(e.target === visor) cerrar(); });
+  document.addEventListener('keydown', function(e){
+    if(!visor.classList.contains('on')) return;
+    if(e.key==='Escape') cerrar();
+    if(e.key==='ArrowLeft') mostrar(actual-1);
+    if(e.key==='ArrowRight') mostrar(actual+1);
+  });
+  var tx = null;
+  visor.addEventListener('touchstart', function(e){ tx = e.touches[0].clientX; }, {passive:true});
+  visor.addEventListener('touchend', function(e){
+    if(tx === null) return;
+    var d = e.changedTouches[0].clientX - tx; tx = null;
+    if(Math.abs(d) > 50) mostrar(actual + (d < 0 ? 1 : -1));
+  });
+
+  /* ---------- Fondos: crossfade automático ---------- */
+  var slides = document.querySelectorAll('.slide'), idx = 0;
+  setInterval(function(){
+    slides[idx].classList.remove('on');
+    idx = (idx + 1) % slides.length;
+    slides[idx].classList.add('on');
+  }, 9000);
+
+  /* ---------- Música (opcional) ---------- */
+  var audio = null, btnM = $('#musica');
+  try{
+    audio = new Audio('recursos/musica.mp3');
+    audio.loop = true; audio.volume = .55; audio.preload = 'auto';
+    audio.addEventListener('error', function(){ btnM.classList.remove('show'); });
+  }catch(e){ audio = null; }
+  btnM.addEventListener('click', function(){
+    if(!audio) return;
+    if(audio.paused){ audio.play().then(function(){btnM.classList.remove('off');}).catch(function(){}); }
+    else { audio.pause(); btnM.classList.add('off'); }
+  });
+
+  /* ---------- Aparición progresiva al desplazarse ---------- */
+  function iniciarReveal(){
+    var els = document.querySelectorAll('.rv');
+    if(!('IntersectionObserver' in window)){ els.forEach(function(e){e.classList.add('in');}); return; }
+    var io = new IntersectionObserver(function(entries){
+      var k = 0;
+      entries.forEach(function(en){
+        if(!en.isIntersecting) return;
+        en.target.style.transitionDelay = (k++ * 0.55) + 's';
+        en.target.classList.add('in');
+        io.unobserve(en.target);
+      });
+    }, {threshold:.15, rootMargin:'0px 0px -6% 0px'});
+    els.forEach(function(e){ io.observe(e); });
+  }
+
+  /* ---------- Comenzar ---------- */
+  var iniciado = false;
+  $('#comenzar').addEventListener('click', function(){
+    if(iniciado) return; iniciado = true;
+    try{
+      var de = document.documentElement, fs = de.requestFullscreen || de.webkitRequestFullscreen;
+      if(fs){ var p = fs.call(de); if(p && p.catch) p.catch(function(){}); }
+    }catch(e){}
+    if(audio){
+      var p2 = audio.play();
+      if(p2 && p2.then) p2.then(function(){ btnM.classList.add('show'); }).catch(function(){});
+    }
+    $('#intro').classList.add('out');
+    setTimeout(function(){
+      document.body.classList.add('go');
+      window.scrollTo(0,0);
+      iniciarReveal();
+    }, 900);
+    setTimeout(function(){ $('#intro').style.display = 'none'; }, 1500);
+  });
+
+  /* ---------- Volver a la galería ---------- */
+  $('#volver').addEventListener('click', function(){
+    $('#galeria').scrollIntoView({behavior:'smooth', block:'start'});
+  });
+})();
+</script>
+</body>
+</html>
